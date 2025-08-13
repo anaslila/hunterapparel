@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunter Apparel - Premium Clothing Collection</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/tJrPgXW3/20-25.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="https://i.postimg.cc/tJrPgXW3/20-25.png" alt="Hunter Apparel Logo">
+                <span>Hunter Apparel</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-user"></i>
+                <i class="fas fa-shopping-cart"></i>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Unleash Your Style</h1>
+            <p>Discover premium clothing that defines your personality</p>
+            <button class="cta-btn">Shop Now</button>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2>Shop by Category</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" alt="Men's Collection">
+                    <h3>Men's Collection</h3>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400" alt="Women's Collection">
+                    <h3>Women's Collection</h3>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400" alt="Accessories">
+                    <h3>Accessories</h3>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=400" alt="Footwear">
+                    <h3>Footwear</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Featured Products</h2>
+            <div class="product-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="men">Men</button>
+                <button class="filter-btn" data-filter="women">Women</button>
+                <button class="filter-btn" data-filter="accessories">Accessories</button>
+            </div>
+            <div class="product-grid" id="productGrid">
+                <!-- Products will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Hunter Apparel</h2>
+                    <p>Hunter Apparel is a premium clothing brand that combines style, comfort, and quality. We believe that fashion is a form of self-expression, and our carefully curated collections are designed to help you make a statement.</p>
+                    <p>With a focus on contemporary designs and sustainable practices, we create clothing that not only looks good but feels good too.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-shipping-fast"></i>
+                            <h4>Free Shipping</h4>
+                            <p>On orders over $100</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-undo"></i>
+                            <h4>Easy Returns</h4>
+                            <p>30-day return policy</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-award"></i>
+                            <h4>Premium Quality</h4>
+                            <p>Finest materials</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500" alt="About Us">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Address</h4>
+                            <p>123 Fashion Street, Style City, SC 12345</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@hunterapparel.com</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="https://i.postimg.cc/tJrPgXW3/20-25.png" alt="Hunter Apparel Logo">
+                        <span>Hunter Apparel</span>
+                    </div>
+                    <p>Premium clothing that defines your style and personality.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#">Men's Wear</a></li>
+                        <li><a href="#">Women's Wear</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">Footwear</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hunter Apparel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="products/products.js"></script>
+</body>
+</html>
