@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hunter Apparel - Premium Clothing Collection</title>
+    <title>Hunter Apparel - Premium Indian Fashion</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/tJrPgXW3/20-25.png">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -24,9 +24,23 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="nav-icons">
-                <i class="fas fa-search"></i>
-                <i class="fas fa-user"></i>
-                <i class="fas fa-shopping-cart"></i>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search products...">
+                </div>
+                <div class="profile-dropdown">
+                    <i class="fas fa-user profile-icon"></i>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="showLogin()">Login</a>
+                        <a href="#" onclick="showSignup()">Sign Up</a>
+                        <a href="#">My Account</a>
+                        <a href="#">Orders</a>
+                    </div>
+                </div>
+                <div class="cart-icon-container">
+                    <i class="fas fa-shopping-bag cart-icon"></i>
+                    <span class="cart-count">0</span>
+                </div>
                 <div class="hamburger">
                     <span></span>
                     <span></span>
@@ -39,32 +53,48 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Unleash Your Style</h1>
-            <p>Discover premium clothing that defines your personality</p>
-            <button class="cta-btn">Shop Now</button>
+            <h1>भारतीय स्टाइल, आधुनिक फैशन</h1>
+            <h2>Indian Style, Modern Fashion</h2>
+            <p>Discover premium Indian fashion that blends tradition with contemporary elegance</p>
+            <button class="cta-btn">Explore Collection</button>
+        </div>
+        <div class="hero-decoration">
+            <div class="mandala-pattern"></div>
         </div>
     </section>
 
     <!-- Categories -->
     <section class="categories">
         <div class="container">
-            <h2>Shop by Category</h2>
+            <h2>Shop by Collection</h2>
             <div class="category-grid">
-                <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" alt="Men's Collection">
-                    <h3>Men's Collection</h3>
+                <div class="category-card" data-category="men">
+                    <img src="https://images.unsplash.com/photo-1506629905607-45eb3e96147a?w=400" alt="Men's Collection">
+                    <div class="category-overlay">
+                        <h3>Men's Collection</h3>
+                        <p>Traditional & Contemporary</p>
+                    </div>
                 </div>
-                <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400" alt="Women's Collection">
-                    <h3>Women's Collection</h3>
+                <div class="category-card" data-category="women">
+                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400" alt="Women's Collection">
+                    <div class="category-overlay">
+                        <h3>Women's Collection</h3>
+                        <p>Ethnic & Western Wear</p>
+                    </div>
                 </div>
-                <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400" alt="Accessories">
-                    <h3>Accessories</h3>
+                <div class="category-card" data-category="accessories">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400" alt="Accessories">
+                    <div class="category-overlay">
+                        <h3>Accessories</h3>
+                        <p>Jewelry & More</p>
+                    </div>
                 </div>
-                <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=400" alt="Footwear">
-                    <h3>Footwear</h3>
+                <div class="category-card" data-category="footwear">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400" alt="Footwear">
+                    <div class="category-overlay">
+                        <h3>Footwear</h3>
+                        <p>Traditional & Modern</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,12 +103,16 @@
     <!-- Products Section -->
     <section id="products" class="products">
         <div class="container">
-            <h2>Featured Products</h2>
+            <div class="section-header">
+                <h2>Featured Products</h2>
+                <p>Handpicked collections from across India</p>
+            </div>
             <div class="product-filters">
-                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn active" data-filter="all">All Products</button>
                 <button class="filter-btn" data-filter="men">Men</button>
                 <button class="filter-btn" data-filter="women">Women</button>
                 <button class="filter-btn" data-filter="accessories">Accessories</button>
+                <button class="filter-btn" data-filter="footwear">Footwear</button>
             </div>
             <div class="product-grid" id="productGrid">
                 <!-- Products will be loaded here dynamically -->
@@ -92,28 +126,34 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2>About Hunter Apparel</h2>
-                    <p>Hunter Apparel is a premium clothing brand that combines style, comfort, and quality. We believe that fashion is a form of self-expression, and our carefully curated collections are designed to help you make a statement.</p>
-                    <p>With a focus on contemporary designs and sustainable practices, we create clothing that not only looks good but feels good too.</p>
+                    <p>हम भारतीय फैशन की समृद्ध परंपरा को आधुनिक शैली के साथ मिलाते हैं।</p>
+                    <p>Hunter Apparel celebrates the rich heritage of Indian fashion while embracing contemporary designs. Our carefully curated collections showcase the finest craftsmanship from artisans across India, bringing you clothing that tells a story of tradition and innovation.</p>
                     <div class="features">
                         <div class="feature">
-                            <i class="fas fa-shipping-fast"></i>
+                            <i class="fas fa-truck"></i>
                             <h4>Free Shipping</h4>
-                            <p>On orders over $100</p>
+                            <p>On orders above ₹2,999</p>
                         </div>
                         <div class="feature">
-                            <i class="fas fa-undo"></i>
+                            <i class="fas fa-exchange-alt"></i>
                             <h4>Easy Returns</h4>
-                            <p>30-day return policy</p>
+                            <p>15-day return policy</p>
                         </div>
                         <div class="feature">
                             <i class="fas fa-award"></i>
-                            <h4>Premium Quality</h4>
-                            <p>Finest materials</p>
+                            <h4>Authentic Quality</h4>
+                            <p>100% Original Products</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-hands-helping"></i>
+                            <h4>Made in India</h4>
+                            <p>Supporting local artisans</p>
                         </div>
                     </div>
                 </div>
                 <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500" alt="About Us">
+                    <img src="https://images.unsplash.com/photo-1583391733956-6c78276ff8c2?w=500" alt="Indian Fashion">
+                    <div class="image-decoration"></div>
                 </div>
             </div>
         </div>
@@ -122,35 +162,46 @@
     <!-- Contact Section -->
     <section id="contact" class="contact">
         <div class="container">
-            <h2>Get in Touch</h2>
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+                <p>हमसे जुड़ें - We're here to help</p>
+            </div>
             <div class="contact-content">
                 <div class="contact-info">
                     <div class="contact-item">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
                             <h4>Address</h4>
-                            <p>123 Fashion Street, Style City, SC 12345</p>
+                            <p>123 Fashion Street, Connaught Place<br>New Delhi, Delhi 110001</p>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-phone"></i>
                         <div>
                             <h4>Phone</h4>
-                            <p>+1 (555) 123-4567</p>
+                            <p>+91 98765 43210</p>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
                         <div>
                             <h4>Email</h4>
-                            <p>info@hunterapparel.com</p>
+                            <p>hello@hunterapparel.in</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Store Hours</h4>
+                            <p>Mon - Sat: 10 AM - 9 PM<br>Sunday: 11 AM - 7 PM</p>
                         </div>
                     </div>
                 </div>
                 <form class="contact-form">
-                    <input type="text" placeholder="Your Name" required>
+                    <input type="text" placeholder="Your Name / आपका नाम" required>
                     <input type="email" placeholder="Your Email" required>
-                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <input type="tel" placeholder="Phone Number / फोन नंबर" required>
+                    <textarea placeholder="Your Message / आपका संदेश" rows="5" required></textarea>
                     <button type="submit">Send Message</button>
                 </form>
             </div>
@@ -166,12 +217,12 @@
                         <img src="https://i.postimg.cc/tJrPgXW3/20-25.png" alt="Hunter Apparel Logo">
                         <span>Hunter Apparel</span>
                     </div>
-                    <p>Premium clothing that defines your style and personality.</p>
+                    <p>Premium Indian fashion that celebrates tradition with modern elegance.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div class="footer-section">
@@ -184,7 +235,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Categories</h4>
+                    <h4>Collections</h4>
                     <ul>
                         <li><a href="#">Men's Wear</a></li>
                         <li><a href="#">Women's Wear</a></li>
@@ -193,20 +244,70 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Customer Service</h4>
+                    <h4>Customer Care</h4>
                     <ul>
                         <li><a href="#">Size Guide</a></li>
-                        <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Hunter Apparel. All rights reserved.</p>
+                <p>&copy; 2025 Hunter Apparel. All rights reserved. | Made in India with ❤️</p>
             </div>
         </div>
     </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <i class="fas fa-times close-cart"></i>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total: ₹<span id="cartTotal">0</span></strong>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Login to Your Account</h2>
+            <form class="auth-form">
+                <input type="email" placeholder="Email Address" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Create New Account</h2>
+            <form class="auth-form">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="tel" placeholder="Phone Number" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+        </div>
+    </div>
 
     <script src="script.js"></script>
     <script src="products/products.js"></script>
