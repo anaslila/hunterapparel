@@ -3,6 +3,7 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let appliedPromo = JSON.parse(localStorage.getItem('appliedPromo')) || null;
 let isSearchOpen = false;
 let searchTimeout;
+let cartItemStates = new Map(); // Track which items are in cart
 
 // DOM elements
 const searchIcon = document.querySelector('.search-icon');
@@ -21,8 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
     updatePromoUI();
     setupEventListeners();
+    setupPromoToggle();
+    adjustSearchPosition();
+    
     if (typeof loadProducts === 'function') {
         loadProducts();
+        // Update product card states after products load
+        setTimeout(() => {
+            updateAllProductCardStates();
+        }, 1500);
     }
     setupIntersectionObserver();
 });
@@ -128,6 +136,9 @@ function setupEventListeners() {
 
     // Promo code functionality
     setupPromoCodeListeners();
+
+    // Window resize handler
+    window.addEventListener('resize', adjustSearchPosition);
 }
 
 // Enhanced Search functionality
@@ -284,6 +295,20 @@ function hideNoResultsMessage() {
     }
 }
 
+// Enhanced search positioning
+function adjustSearchPosition() {
+    const searchInput = document.querySelector('.search-input');
+    const searchDropdown = document.querySelector('.search-dropdown');
+    const navbar = document.querySelector('.navbar');
+    
+    if (searchInput && searchDropdown) {
+        const rightOffset = Math.min(40, window.innerWidth - 380); // Ensure it doesn't go off screen
+        
+        searchInput.style.right = rightOffset + 'px';
+        searchDropdown.style.right = rightOffset + 'px';
+    }
+}
+
 // Cart functionality
 function openCart() {
     cartSidebar.classList.add('active');
@@ -297,6 +322,7 @@ function closeCartSidebar() {
     document.body.style.overflow = 'auto';
 }
 
+// Enhanced addToCart function
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
@@ -311,6 +337,7 @@ function addToCart(productId) {
     
     saveCart();
     updateCartUI();
+    updateProductCardState(productId);
     showMessage(`${product.name} added to cart!`, 'success');
     
     // Add animation to cart icon
@@ -318,17 +345,73 @@ function addToCart(productId) {
     setTimeout(() => {
         cartIcon.style.transform = 'scale(1)';
     }, 300);
+}
 
-    // Add to cart button animation
-    const button = event.target;
-    const originalText = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-check"></i> Added!';
-    button.style.background = 'var(--success)';
+// Update product card state to show quantity controls
+function updateProductCardState(productId) {
+    const productCard = document.querySelector(`[data-id="${productId}"]`);
+    if (!productCard) return;
     
-    setTimeout(() => {
-        button.innerHTML = originalText;
-        button.style.background = '';
-    }, 1500);
+    const cartItem = cart.find(item => item.id === productId);
+    const addToCartBtn = productCard.querySelector('.add-to-cart');
+    const quantityControl = productCard.querySelector('.quantity-control');
+    
+    if (cartItem && cartItem.quantity > 0) {
+        // Replace add to cart button with quantity controls
+        if (addToCartBtn && !quantityControl) {
+            addToCartBtn.outerHTML = `
+                <div class="quantity-control">
+                    <button class="quantity-btn" onclick="updateQuantityOnCard(${productId}, -1)">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="quantity-display">${cartItem.quantity}</span>
+                    <button class="quantity-btn" onclick="updateQuantityOnCard(${productId}, 1)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            `;
+        } else if (quantityControl) {
+            // Update existing quantity display
+            const quantityDisplay = quantityControl.querySelector('.quantity-display');
+            if (quantityDisplay) {
+                quantityDisplay.textContent = cartItem.quantity;
+            }
+        }
+    } else {
+        // Show add to cart button
+        if (quantityControl) {
+            quantityControl.outerHTML = `
+                <button class="add-to-cart" onclick="addToCart(${productId})" data-product-id="${productId}">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Add to Cart</span>
+                </button>
+            `;
+        }
+    }
+}
+
+// Update quantity from product card
+function updateQuantityOnCard(productId, change) {
+    const item = cart.find(item => item.id === productId);
+    if (!item) return;
+    
+    item.quantity += change;
+    
+    if (item.quantity <= 0) {
+        removeFromCart(productId);
+        updateProductCardState(productId);
+    } else {
+        saveCart();
+        updateCartUI();
+        updateProductCardState(productId);
+    }
+}
+
+// Update all product cards state on page load
+function updateAllProductCardStates() {
+    cart.forEach(item => {
+        updateProductCardState(item.id);
+    });
 }
 
 function removeFromCart(productId) {
@@ -337,6 +420,7 @@ function removeFromCart(productId) {
         cart = cart.filter(item => item.id !== productId);
         saveCart();
         updateCartUI();
+        updateProductCardState(productId);
         showMessage(`${item.name} removed from cart`, 'success');
     }
 }
@@ -352,6 +436,7 @@ function updateQuantity(productId, change) {
     } else {
         saveCart();
         updateCartUI();
+        updateProductCardState(productId);
     }
 }
 
@@ -379,8 +464,8 @@ function updateCartUI() {
                 <p>Add some beautiful pieces to get started!</p>
             </div>
         `;
-        cartSubtotal.textContent = '0';
-        cartTotal.textContent = '0';
+        if (cartSubtotal) cartSubtotal.textContent = '0';
+        if (cartTotal) cartTotal.textContent = '0';
     } else {
         cartItems.innerHTML = cart.map(item => `
             <div class="cart-item">
@@ -435,21 +520,23 @@ function updateCartUI() {
         
         const total = subtotal - discount + shipping;
         
-        cartSubtotal.textContent = subtotal.toFixed(2);
-        cartTotal.textContent = Math.max(0, total).toFixed(2);
+        if (cartSubtotal) cartSubtotal.textContent = subtotal.toFixed(2);
+        if (cartTotal) cartTotal.textContent = Math.max(0, total).toFixed(2);
         
         // Show/hide discount row
-        if (discount > 0) {
+        if (discount > 0 && cartDiscount && discountRow) {
             cartDiscount.textContent = discount.toFixed(2);
             discountRow.style.display = 'flex';
-        } else {
+        } else if (discountRow) {
             discountRow.style.display = 'none';
         }
         
         // Update shipping display
-        shippingCost.textContent = shipping === 0 ? 'Free' : `₹${shipping}`;
-        if (subtotal >= 999) {
-            shippingCost.innerHTML = '<span style="color: var(--success);">Free</span>';
+        if (shippingCost) {
+            shippingCost.textContent = shipping === 0 ? 'Free' : `₹${shipping}`;
+            if (subtotal >= 999) {
+                shippingCost.innerHTML = '<span style="color: var(--success);">Free</span>';
+            }
         }
     }
 }
@@ -507,7 +594,7 @@ function updatePromoUI() {
     const appliedPromoCode = document.getElementById('appliedPromoCode');
     const promoButtons = document.querySelectorAll('.apply-promo');
     
-    if (appliedPromo) {
+    if (appliedPromo && appliedPromoElement && appliedPromoCode) {
         appliedPromoElement.style.display = 'block';
         appliedPromoCode.textContent = appliedPromo.code;
         
@@ -524,7 +611,7 @@ function updatePromoUI() {
             }
         });
     } else {
-        appliedPromoElement.style.display = 'none';
+        if (appliedPromoElement) appliedPromoElement.style.display = 'none';
         
         // Enable all promo buttons
         promoButtons.forEach(btn => {
@@ -532,6 +619,18 @@ function updatePromoUI() {
             btn.textContent = 'Apply';
             btn.style.opacity = '1';
             btn.style.background = '';
+        });
+    }
+}
+
+// Promo section toggle functionality
+function setupPromoToggle() {
+    const promoHeader = document.querySelector('.promo-header');
+    const promoSection = document.querySelector('.promo-section');
+    
+    if (promoHeader && promoSection) {
+        promoHeader.addEventListener('click', () => {
+            promoSection.classList.toggle('expanded');
         });
     }
 }
@@ -626,6 +725,7 @@ function proceedToCheckout() {
                 localStorage.removeItem('appliedPromo');
                 updateCartUI();
                 updatePromoUI();
+                updateAllProductCardStates();
                 closeCartSidebar();
             }
         }, 2000);
@@ -900,6 +1000,9 @@ const throttledScroll = throttle(handleNavbarScroll, 100);
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.updateQuantity = updateQuantity;
+window.updateQuantityOnCard = updateQuantityOnCard;
+window.updateProductCardState = updateProductCardState;
+window.updateAllProductCardStates = updateAllProductCardStates;
 window.showLogin = showLogin;
 window.showSignup = showSignup;
 window.removePromo = removePromo;
@@ -978,157 +1081,3 @@ style.textContent = `
 document.head.appendChild(style);
 
 console.log('🎉 Hunter Apparel - Premium Fashion Store Loaded Successfully!');
-// Add this to your existing script.js file
-
-// Enhanced cart item tracking
-let cartItemStates = new Map(); // Track which items are in cart
-
-// Modified addToCart function
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-
-    const existingItem = cart.find(item => item.id === productId);
-    
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({ ...product, quantity: 1 });
-    }
-    
-    saveCart();
-    updateCartUI();
-    updateProductCardState(productId);
-    showMessage(`${product.name} added to cart!`, 'success');
-    
-    // Add animation to cart icon
-    cartIcon.style.transform = 'scale(1.3)';
-    setTimeout(() => {
-        cartIcon.style.transform = 'scale(1)';
-    }, 300);
-}
-
-// Update product card state to show quantity controls
-function updateProductCardState(productId) {
-    const productCard = document.querySelector(`[data-id="${productId}"]`);
-    if (!productCard) return;
-    
-    const cartItem = cart.find(item => item.id === productId);
-    const addToCartBtn = productCard.querySelector('.add-to-cart');
-    
-    if (cartItem && cartItem.quantity > 0) {
-        // Replace add to cart button with quantity controls
-        addToCartBtn.outerHTML = `
-            <div class="quantity-control">
-                <button class="quantity-btn" onclick="updateQuantityOnCard(${productId}, -1)">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <span class="quantity-display">${cartItem.quantity}</span>
-                <button class="quantity-btn" onclick="updateQuantityOnCard(${productId}, 1)">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-        `;
-    } else {
-        // Show add to cart button
-        const quantityControl = productCard.querySelector('.quantity-control');
-        if (quantityControl) {
-            quantityControl.outerHTML = `
-                <button class="add-to-cart" onclick="addToCart(${productId})" data-product-id="${productId}">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Add to Cart</span>
-                </button>
-            `;
-        }
-    }
-}
-
-// Update quantity from product card
-function updateQuantityOnCard(productId, change) {
-    const item = cart.find(item => item.id === productId);
-    if (!item) return;
-    
-    item.quantity += change;
-    
-    if (item.quantity <= 0) {
-        removeFromCart(productId);
-        updateProductCardState(productId);
-    } else {
-        saveCart();
-        updateCartUI();
-        updateProductCardState(productId);
-    }
-}
-
-// Update all product cards state on page load
-function updateAllProductCardStates() {
-    cart.forEach(item => {
-        updateProductCardState(item.id);
-    });
-}
-
-// Modified removeFromCart function
-function removeFromCart(productId) {
-    const item = cart.find(item => item.id === productId);
-    if (item) {
-        cart = cart.filter(item => item.id !== productId);
-        saveCart();
-        updateCartUI();
-        updateProductCardState(productId);
-        showMessage(`${item.name} removed from cart`, 'success');
-    }
-}
-
-// Promo section toggle functionality
-function setupPromoToggle() {
-    const promoHeader = document.querySelector('.promo-header');
-    const promoSection = document.querySelector('.promo-section');
-    
-    if (promoHeader && promoSection) {
-        promoHeader.addEventListener('click', () => {
-            promoSection.classList.toggle('expanded');
-        });
-    }
-}
-
-// Enhanced search positioning
-function adjustSearchPosition() {
-    const searchInput = document.querySelector('.search-input');
-    const searchDropdown = document.querySelector('.search-dropdown');
-    const navbar = document.querySelector('.navbar');
-    
-    if (searchInput && searchDropdown) {
-        const navbarRect = navbar.getBoundingClientRect();
-        const rightOffset = Math.min(40, window.innerWidth - 380); // Ensure it doesn't go off screen
-        
-        searchInput.style.right = rightOffset + 'px';
-        searchDropdown.style.right = rightOffset + 'px';
-    }
-}
-
-// Call this on window resize
-window.addEventListener('resize', adjustSearchPosition);
-
-// Add to your existing DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', () => {
-    updateCartUI();
-    updatePromoUI();
-    setupEventListeners();
-    setupPromoToggle();
-    adjustSearchPosition();
-    
-    if (typeof loadProducts === 'function') {
-        loadProducts();
-        // Update product card states after products load
-        setTimeout(() => {
-            updateAllProductCardStates();
-        }, 1500);
-    }
-    setupIntersectionObserver();
-});
-
-// Make new functions globally available
-window.updateQuantityOnCard = updateQuantityOnCard;
-window.updateProductCardState = updateProductCardState;
-window.updateAllProductCardStates = updateAllProductCardStates;
-
