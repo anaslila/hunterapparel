@@ -112,7 +112,7 @@
             <div class="category-grid">
                 <div class="category-card" data-category="men">
                     <div class="category-image">
-                        <img src="https://cottonworld.net/cdn/shop/files/WEBSITE_NEW_ARRIVAL_LOOK_BOOK_IMAGES_1-03.jpg?v=1752656614" alt="Men's Collection">
+                        <img src="https://images.unsplash.com/photo-1506629905607-45eb3e96147a?w=600&q=80" alt="Men's Collection">
                         <div class="category-overlay">
                             <div class="category-content">
                                 <h3>Men's Heritage</h3>
@@ -403,37 +403,41 @@
         <div class="cart-items" id="cartItems">
             <!-- Cart items will be dynamically added here -->
         </div>
+        <!-- Promo Section with Toggle -->
         <div class="promo-section">
             <div class="promo-header">
                 <h4><i class="fas fa-tags"></i> Available Offers</h4>
+                <i class="fas fa-chevron-down promo-toggle"></i>
             </div>
-            <div class="promo-codes">
-                <div class="promo-item" data-code="BUY2GET1" data-min="0">
-                    <div class="promo-info">
-                        <h5>Buy 2 Get 1 Free</h5>
-                        <p>On all products</p>
+            <div class="promo-content">
+                <div class="promo-codes">
+                    <div class="promo-item" data-code="BUY2GET1" data-min="0">
+                        <div class="promo-info">
+                            <h5>Buy 2 Get 1 Free</h5>
+                            <p>On all products</p>
+                        </div>
+                        <button class="apply-promo">Apply</button>
                     </div>
-                    <button class="apply-promo">Apply</button>
-                </div>
-                <div class="promo-item" data-code="SAVE10" data-min="1500">
-                    <div class="promo-info">
-                        <h5>10% Off</h5>
-                        <p>Minimum order ₹1,500</p>
+                    <div class="promo-item" data-code="SAVE10" data-min="1500">
+                        <div class="promo-info">
+                            <h5>10% Off</h5>
+                            <p>Minimum order ₹1,500</p>
+                        </div>
+                        <button class="apply-promo">Apply</button>
                     </div>
-                    <button class="apply-promo">Apply</button>
-                </div>
-                <div class="promo-item" data-code="FREEDEL" data-min="999">
-                    <div class="promo-info">
-                        <h5>Free Delivery</h5>
-                        <p>On orders above ₹999</p>
+                    <div class="promo-item" data-code="FREEDEL" data-min="999">
+                        <div class="promo-info">
+                            <h5>Free Delivery</h5>
+                            <p>On orders above ₹999</p>
+                        </div>
+                        <button class="apply-promo">Apply</button>
                     </div>
-                    <button class="apply-promo">Apply</button>
                 </div>
-            </div>
-            <div class="applied-promo" id="appliedPromo" style="display: none;">
-                <div class="promo-applied">
-                    <span>Promo Applied: <strong id="appliedPromoCode"></strong></span>
-                    <button class="remove-promo" onclick="removePromo()">Remove</button>
+                <div class="applied-promo" id="appliedPromo" style="display: none;">
+                    <div class="promo-applied">
+                        <span>Promo Applied: <strong id="appliedPromoCode"></strong></span>
+                        <button class="remove-promo" onclick="removePromo()">Remove</button>
+                    </div>
                 </div>
             </div>
         </div>
